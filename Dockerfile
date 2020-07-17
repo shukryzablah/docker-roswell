@@ -20,18 +20,17 @@ RUN mkdir -p "/home/${USERNAME}/builds" && \
     cd roswell && \
     makepkg -src --noconfirm
 
-USER shukry
-WORKDIR "/home/shukry/builds/roswell/"
-RUN ls -l
-
+# Get Arch Linux and update all packages.
 FROM archlinux
 RUN pacman -Syu --noconfirm
 RUN pacman -S base-devel --noconfirm --needed
 
+# Retrieve built package and install with pacman.
 ARG USERNAME=shukry
 ARG PKGVERSION="20.06.14.107"
 COPY --from=builder /home/${USERNAME}/builds/roswell/roswell-${PKGVERSION}-1-x86_64.pkg.tar.zst .
 RUN pacman -U roswell-${PKGVERSION}-1-x86_64.pkg.tar.zst --noconfirm
 
+# Run the default Roswell REPL.
 ENTRYPOINT ["ros"]
 CMD ["run"]
