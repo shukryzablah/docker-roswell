@@ -32,5 +32,6 @@ COPY --from=builder /home/${USERNAME}/builds/roswell/roswell-${PKGVERSION}-1-x86
 RUN pacman -U roswell-${PKGVERSION}-1-x86_64.pkg.tar.zst --noconfirm
 
 # Run the default Roswell REPL.
+ENV PATH /root/.roswell/bin:${PATH}
 ENTRYPOINT ["ros"]
 CMD ["run"]
